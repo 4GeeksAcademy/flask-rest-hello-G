@@ -14,9 +14,8 @@ class User(db.Model):
     username: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     first_name: Mapped[str] = mapped_column(String(120), nullable=False)
     last_name: Mapped[str] = mapped_column(String(120), nullable=False)
-    bio: Mapped[str] = mapped_column(Text, nullable=True)
     posts: Mapped[list["Post"]] = relationship(back_populates="user")
-    comments: Mapped[list["Comment"]] = relationship("Comment", back_populates="user")
+    comments: Mapped[list["Comments"]] = relationship("Comment", back_populates="user")
     
 
     def serialize(self):
@@ -38,7 +37,7 @@ class Post(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     content: Mapped[str] = mapped_column(Text)
     user: Mapped["User"] = relationship("User", back_populates="posts")
-    comments: Mapped[list["Comment"]] = relationship(back_populates="post")
+    comments: Mapped[list["Comments"]] = relationship(back_populates="post")
     medias: Mapped[list["Media"]] = relationship(back_populates="post")
 
 
@@ -80,7 +79,7 @@ class follower(db.Model):
         }
     
 
-class comments(db.Model):
+class Comments(db.Model):
     __tablename__="comment"
     id: Mapped[int] = mapped_column(primary_key=True)
     content: Mapped[str] = mapped_column(Text)
